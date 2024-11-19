@@ -11,10 +11,16 @@ public class PlayerObject : MonoBehaviour
     private Transform _transform;
     private float _speed = 5.0f;
     private Vector3 _direction;
+    private Animator _animator;
+    
+    //ハッシュ値をキャッシュ。軽量化のため
+    private static readonly int XHash = Animator.StringToHash("X");
+    private static readonly int YHash = Animator.StringToHash("Y");
 
     private void Awake()
     {
         _transform = transform;
+        _animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -33,7 +39,19 @@ public class PlayerObject : MonoBehaviour
 
     private void ChangeDirection(InputAction.CallbackContext context)
     {
-        _direction = context.ReadValue<Vector2>().normalized;
+        var direction = context.ReadValue<Vector2>().normalized;
+        _direction = direction;
+
+        if (direction != Vector2.zero)
+        {
+            _animator.SetFloat(XHash, direction.x);
+            _animator.SetFloat(YHash, direction.y);
+            
+
+            _transform.localScale = direction.x <= 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+        }
+        
+
     }
     
     
