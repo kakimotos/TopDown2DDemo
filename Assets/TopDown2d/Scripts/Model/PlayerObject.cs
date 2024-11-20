@@ -4,59 +4,90 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class PlayerObject : MonoBehaviour
+namespace TopDown2D.Scripts.Model
 {
-    
-    [SerializeField] private PlayerInput input;
 
-    private Transform _transform;
-    private float _speed = 5.0f;
-    private Vector3 _direction;
-    private Animator _animator;
-    
-    //ハッシュ値をキャッシュ。軽量化のため
-    private static readonly int XHash = Animator.StringToHash("X");
-    private static readonly int YHash = Animator.StringToHash("Y");
-    private static readonly int SpeedHash = Animator.StringToHash("Speed");
-
-    private void Awake()
+    public class PlayerObject : MonoBehaviour
     {
-        _transform = transform;
-        _animator = GetComponent<Animator>();
-    }
+        
+        [SerializeField] private PlayerInput input;
 
-    private void Start()
-    {
-        input.actions["Move"].performed += ChangeDirection;
-        input.actions["Move"].canceled += ChangeDirection;
-    }
+        private Transform _transform;
+        private float _speed = 5.0f;
+        private Vector3 _direction;
+        private Animator _animator;
 
-    private void Update()
-    {
-        var position = _transform.position;
-        var distance = _speed * Time.deltaTime;
+        [SerializeField] private MapManager mapManager;
+        [SerializeField] private BombsPool bombsPool;
+        
+        //ハッシュ値をキャッシュ。軽量化のため
+        private static readonly int XHash = Animator.StringToHash("X");
+        private static readonly int YHash = Animator.StringToHash("Y");
+        private static readonly int SpeedHash = Animator.StringToHash("Speed");
 
-        _transform.position = position + _direction * distance;
-    }
-
-    private void ChangeDirection(InputAction.CallbackContext context)
-    {
-        var direction = context.ReadValue<Vector2>().normalized;
-        _direction = direction;
-
-        _animator.SetFloat(SpeedHash, direction.magnitude);
-
-        if (direction != Vector2.zero)
+        private void Awake()
         {
-            _animator.SetFloat(XHash, direction.x);
-            _animator.SetFloat(YHash, direction.y);
+            _transform = transform;
+            _animator = GetComponent<Animator>();
+        }
+
+        private void Start()
+        {
+            
+        }
+
+        private void OnEnable()
+        {
+            if (input == null) return;
+            input.actions["Move"].performed += ChangeDirection;
+            input.actions["Move"].canceled += ChangeDirection;
+            input.actions["Attack"].performed += OnAttack;
+        }
+
+        private void OnDisable()
+        {
+            if (input == null) return;
+            input.actions["Move"].performed -= ChangeDirection;
+            input.actions["Move"].canceled -= ChangeDirection;
+            input.actions["Attack"].performed -= OnAttack;
+        }
+
+        private void Update()
+        {
+            var position = _transform.position;
+            var distance = _speed * Time.deltaTime;
+
+            _transform.position = position + _direction * distance;
+        }
+
+        private void ChangeDirection(InputAction.CallbackContext context)
+        {
+            var direction = context.ReadValue<Vector2>().normalized;
+            _direction = direction;
+
+            _animator.SetFloat(SpeedHash, direction.magnitude);
+
+            if (direction != Vector2.zero)
+            {
+                _animator.SetFloat(XHash, direction.x);
+                _animator.SetFloat(YHash, direction.y);
+                
+
+                _transform.localScale = direction.x <= 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+            }
             
 
-            _transform.localScale = direction.x <= 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+        }
+
+        private void OnAttack(InputAction.CallbackContext context)
+        {
+            var tilePosition = mapManager.backgroundTileMap.WorldToCell(_transform.position);
+            var tileCenter = mapManager.backgroundTileMap.GetCellCenterWorld(tilePosition);
+            bombsPool.PlaceBomb(tileCenter);
+            
         }
         
-
+        
     }
-    
-    
+
 }
