@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,7 @@ public class PlayerObject : MonoBehaviour
     //ハッシュ値をキャッシュ。軽量化のため
     private static readonly int XHash = Animator.StringToHash("X");
     private static readonly int YHash = Animator.StringToHash("Y");
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
 
     private void Awake()
     {
@@ -41,6 +43,8 @@ public class PlayerObject : MonoBehaviour
     {
         var direction = context.ReadValue<Vector2>().normalized;
         _direction = direction;
+
+        _animator.SetFloat(SpeedHash, direction.magnitude);
 
         if (direction != Vector2.zero)
         {
