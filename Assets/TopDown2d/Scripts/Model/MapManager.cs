@@ -19,20 +19,27 @@ namespace TopDown2D.Scripts.Model
             _transform = transform;
         }
 
-        private void Start()
-        {
-            GenerateDestroyableWalls();
-        }
 
-        public void GenerateDestroyableWalls()
+        public void GenerateDestroyableWalls(Vector3 playerPosition)
         {
             BoundsInt bounds = wallTilemap.cellBounds;
 
             var possiblePositions = new List<Vector3Int>();
 
+            var playerCellPosition = backgroundTileMap.WorldToCell(playerPosition);
+            var playerZone = new List<Vector3Int>();
+            for (var x = -1; x <= 1; x++)
+            {
+                for (var y = -1; y <= 1; y++)
+                {
+                    playerZone.Add(playerCellPosition + new Vector3Int(x,y,0));
+                }
+            }
+            
+
             foreach (var position in bounds.allPositionsWithin)
             {
-                if (backgroundTileMap.HasTile(position) && !wallTilemap.HasTile(position))
+                if (backgroundTileMap.HasTile(position) && !wallTilemap.HasTile(position) && !playerZone.Contains(position))
                 {
                     possiblePositions.Add(position);
                 }
@@ -47,7 +54,7 @@ namespace TopDown2D.Scripts.Model
                 var worldPosition = backgroundTileMap.GetCellCenterWorld(selectedPosition);
 
                 Instantiate(WallPrefab, worldPosition, Quaternion.identity, _transform);
-                
+
                 possiblePositions.RemoveAt(randomIndex);
             }
         }

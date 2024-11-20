@@ -29,11 +29,11 @@ namespace TopDown2D.Scripts.Model
         {
             _transform = transform;
             _animator = GetComponent<Animator>();
-        }
+        } 
 
         private void Start()
         {
-            
+            mapManager.GenerateDestroyableWalls(_transform.position);
         }
 
         private void OnEnable()
