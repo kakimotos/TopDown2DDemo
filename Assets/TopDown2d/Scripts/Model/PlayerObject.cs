@@ -27,6 +27,8 @@ namespace TopDown2D.Scripts.Model
         private static readonly int XHash = Animator.StringToHash("X");
         private static readonly int YHash = Animator.StringToHash("Y");
         private static readonly int SpeedHash = Animator.StringToHash("Speed");
+        private static readonly int HitHash = Animator.StringToHash("Hit");
+        private static readonly int VanishHash = Animator.StringToHash("Vanish");
 
         private void Awake()
         {
@@ -95,6 +97,7 @@ namespace TopDown2D.Scripts.Model
             if (explosion != null)
             {
                 health--;
+                _animator.SetTrigger(health <= 0 ? VanishHash : HitHash);
             }
         }
         

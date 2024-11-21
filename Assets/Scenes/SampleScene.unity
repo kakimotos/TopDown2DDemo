@@ -1371,6 +1371,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 1124694282}
+  health: 2
+  firePower: 1
   mapManager: {fileID: 1355188558}
   bombsPool: {fileID: 621426523}
 --- !u!58 &618236310
@@ -1549,7 +1551,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a3f13dea52f4a598dfd93ec6c92e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bombPrefab: {fileID: 609406308895504931, guid: 07339839a01774002899a26a80172012, type: 3}
+  bombPrefab: {fileID: 8271382590867496572, guid: 07339839a01774002899a26a80172012, type: 3}
+  explosionPrefab: {fileID: 6966030482584572710, guid: f5c9764d5095641f7a0bf9864ef359b4, type: 3}
 --- !u!4 &621426524
 Transform:
   m_ObjectHideFlags: 0
@@ -1559,7 +1562,7 @@ Transform:
   m_GameObject: {fileID: 621426522}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.41396472, y: -0.052581504, z: -0.0059165596}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
