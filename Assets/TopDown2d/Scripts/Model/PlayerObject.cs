@@ -17,6 +17,7 @@ namespace TopDown2D.Scripts.Model
         private Vector3 _direction;
         private Animator _animator;
 
+        public int health = 2;
         public int firePower = 1;
 
         [SerializeField] private MapManager mapManager;
@@ -86,6 +87,15 @@ namespace TopDown2D.Scripts.Model
             var tileCenter = mapManager.backgroundTileMap.GetCellCenterWorld(tilePosition);
             bombsPool.PlaceBomb(tileCenter, firePower + 1);
             
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            var explosion = other.GetComponent<ExplosionObject>();
+            if (explosion != null)
+            {
+                health--;
+            }
         }
         
         
