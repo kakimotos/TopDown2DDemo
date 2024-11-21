@@ -44,6 +44,7 @@ namespace TopDown2D.Scripts.Model
         private void GetBomb(BombObject bomb)
         {
             bomb.gameObject.SetActive(true);
+            bomb.boxCollider2D.isTrigger = true;
             Observable.Timer(TimeSpan.FromSeconds(3.0f))
                 .Subscribe(_ =>
                 {
