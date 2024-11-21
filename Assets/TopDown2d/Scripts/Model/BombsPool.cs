@@ -61,7 +61,11 @@ namespace TopDown2D.Scripts.Model
         
         private ExplosionObject CreateExplosion()
         {
-            return Instantiate(explosionPrefab, _transform);
+            var explosion = Instantiate(explosionPrefab, _transform);
+            explosion.OnExplosionEnd
+                .Subscribe(_ => _explosionPool.Release(explosion))
+                .AddTo(explosion.gameObject);
+            return explosion;
         }
 
         private void GetExplosion(ExplosionObject explosion)

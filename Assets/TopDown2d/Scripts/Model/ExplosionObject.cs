@@ -1,7 +1,19 @@
+using JetBrains.Annotations;
 using R3;
 using UnityEngine;
 
-public class ExplosionObject : MonoBehaviour
+namespace TopDown2D.Scripts.Model
 {
-    private readonly Subject<Unit> OnExplosionEnd = new();
+
+    public class ExplosionObject : MonoBehaviour
+    {
+        public readonly Subject<Unit> OnExplosionEnd = new();
+
+        [UsedImplicitly]
+        public void ExplosionEnd()
+        {
+            OnExplosionEnd.OnNext(Unit.Default);
+        }
+    }
+
 }
