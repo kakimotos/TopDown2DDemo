@@ -17,6 +17,8 @@ namespace TopDown2D.Scripts.Model
         private Vector3 _direction;
         private Animator _animator;
 
+        public int firePower = 1;
+
         [SerializeField] private MapManager mapManager;
         [SerializeField] private BombsPool bombsPool;
         
@@ -82,7 +84,7 @@ namespace TopDown2D.Scripts.Model
         {
             var tilePosition = mapManager.backgroundTileMap.WorldToCell(_transform.position);
             var tileCenter = mapManager.backgroundTileMap.GetCellCenterWorld(tilePosition);
-            bombsPool.PlaceBomb(tileCenter);
+            bombsPool.PlaceBomb(tileCenter, firePower + 1);
             
         }
         

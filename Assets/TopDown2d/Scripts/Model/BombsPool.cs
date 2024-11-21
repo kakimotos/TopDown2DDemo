@@ -30,10 +30,11 @@ namespace TopDown2D.Scripts.Model
             );
         }
 
-        public void PlaceBomb(Vector3 position)
+        public void PlaceBomb(Vector3 position, int firePower)
         {
             var bomb = _bombsPool.Get();
             bomb.transform.position = position;
+            bomb.firePower = firePower;
         }
 
         private BombObject CreateBomb()
@@ -51,6 +52,8 @@ namespace TopDown2D.Scripts.Model
                     _bombsPool.Release(bomb);
                     var explosion = _explosionPool.Get();
                     explosion.transform.position = bomb.transform.position;
+                    var firePower = bomb.firePower * 1.5f;
+                    explosion.transform.localScale = new Vector3(firePower, firePower, 1);
                 })
                 .AddTo(bomb.gameObject);
         }

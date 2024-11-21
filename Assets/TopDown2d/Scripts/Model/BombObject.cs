@@ -6,6 +6,7 @@ namespace TopDown2D.Scripts.Model
     public class BombObject : MonoBehaviour
     {
         public BoxCollider2D boxCollider2D;
+        public int firePower;
 
         private void Awake()
         {
