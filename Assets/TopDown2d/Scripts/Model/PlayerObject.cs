@@ -71,7 +71,6 @@ namespace TopDown2D.Scripts.Model
             {
                 _animator.SetFloat(XHash, direction.x);
                 _animator.SetFloat(YHash, direction.y);
-                
 
                 _transform.localScale = direction.x <= 0 ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
             }
