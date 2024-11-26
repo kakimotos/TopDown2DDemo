@@ -94,7 +94,8 @@ namespace TopDown2D.Scripts.Model
         private void OnTriggerEnter2D(Collider2D other)
         {
             var explosion = other.GetComponent<ExplosionObject>();
-            if (explosion != null)
+            var enemy = other.GetComponent<EnemyObject>();
+            if (explosion != null || enemy != null)
             {
                 health--;
                 _animator.SetTrigger(health <= 0 ? VanishHash : HitHash);
