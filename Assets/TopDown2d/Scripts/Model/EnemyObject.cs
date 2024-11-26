@@ -1,5 +1,4 @@
-using Unity.Mathematics.Geometry;
-using UnityEditor.Rendering;
+using R3;
 using UnityEngine;
 
 namespace TopDown2D.Scripts.Model
@@ -10,13 +9,13 @@ namespace TopDown2D.Scripts.Model
         [SerializeField] private GameObject downObject;
         [SerializeField] private GameObject upObject;
         [SerializeField] private GameObject sideObject;
-        [SerializeField] private GameObject vanishObject;
+        [SerializeField] private Vanish vanishObject;
 
         private Vector3Int _direction = Vector3Int.down;
 
         private void Start()
         {
-            vanishObject.SetActive(false);
+            vanishObject.gameObject.SetActive(false);
             
             ChangeAnimation();
         }
@@ -61,7 +60,8 @@ namespace TopDown2D.Scripts.Model
                 downObject.SetActive(false);
                 upObject.SetActive(false);
                 sideObject.SetActive(false);
-                vanishObject.SetActive(true);
+                vanishObject.gameObject.SetActive(true);
+                vanishObject.OnVanishEnd.Subscribe(_ => Destroy(gameObject)).AddTo(gameObject);
                 Debug.Log("Explosion detected on enemy");
             }
             
