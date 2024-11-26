@@ -9,6 +9,7 @@ namespace TopDown2D.Scripts.Model
     public class MapManager : MonoBehaviour
     {
         [SerializeField] private GameObject WallPrefab;
+        [SerializeField] private GameObject EnemyPrefab;
         
         private Transform _transform;
         public Tilemap backgroundTileMap;
@@ -57,7 +58,27 @@ namespace TopDown2D.Scripts.Model
 
                 possiblePositions.RemoveAt(randomIndex);
             }
+            
+            CreateEnemies(possiblePositions);
         }
+
+        private void CreateEnemies(List<Vector3Int> possiblePositions)
+        {
+            var enemyCount = possiblePositions.Count / 3;
+            for (int i = 0; i < enemyCount; i++)
+            {
+                var randomIndex = Random.Range(0, possiblePositions.Count);
+                var selectedPosition = possiblePositions[randomIndex];
+
+                var worldPosition = backgroundTileMap.GetCellCenterWorld(selectedPosition);
+
+                Instantiate(EnemyPrefab, worldPosition, Quaternion.identity, _transform);
+
+                possiblePositions.RemoveAt(randomIndex);
+            }
+        }
+        
+        
 
     }
 

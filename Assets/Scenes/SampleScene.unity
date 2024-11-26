@@ -3574,6 +3574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WallPrefab: {fileID: 1969011324178302711, guid: f99834a42658b41af829dee069081838, type: 3}
+  EnemyPrefab: {fileID: 3266063721620778292, guid: ac79da5cb9d084a1ab77bfec4a9114e3, type: 3}
   backgroundTileMap: {fileID: 1012144967}
   wallTilemap: {fileID: 125843150}
 --- !u!1 &1551749350

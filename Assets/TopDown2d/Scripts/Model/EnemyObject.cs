@@ -1,4 +1,5 @@
 using Unity.Mathematics.Geometry;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace TopDown2D.Scripts.Model
@@ -9,8 +10,16 @@ namespace TopDown2D.Scripts.Model
         [SerializeField] private GameObject downObject;
         [SerializeField] private GameObject upObject;
         [SerializeField] private GameObject sideObject;
+        [SerializeField] private GameObject vanishObject;
 
-        private Vector3 _direction;
+        private Vector3Int _direction = Vector3Int.down;
+
+        private void Start()
+        {
+            vanishObject.SetActive(false);
+            
+            ChangeAnimation();
+        }
 
         private void ChangeAnimation()
         {
@@ -42,8 +51,22 @@ namespace TopDown2D.Scripts.Model
                 }
             }
             
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            var explosion = other.GetComponent<ExplosionObject>();
+            if (explosion != null)
+            {
+                downObject.SetActive(false);
+                upObject.SetActive(false);
+                sideObject.SetActive(false);
+                vanishObject.SetActive(true);
+                Debug.Log("Explosion detected on enemy");
+            }
             
         }
+        
     }
 
 }
