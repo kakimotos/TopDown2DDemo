@@ -3,21 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+using ObservableCollections;
+using R3;
+using R3.Triggers;
 
 namespace TopDown2D.Scripts.Model
 {
     public class MapManager : MonoBehaviour
     {
         [SerializeField] private GameObject WallPrefab;
-        [SerializeField] private GameObject EnemyPrefab;
+        [SerializeField] private EnemyObject EnemyPrefab;
         
         private Transform _transform;
         public Tilemap backgroundTileMap;
         public Tilemap wallTilemap;
+        public ObservableList<EnemyObject> enemies = new();
 
         private void Awake()
         {
             _transform = transform;
+        }
+
+        private void Start()
+        {
+            enemies.ObserveCountChanged().Subscribe(count => Debug.Log(count));
         }
 
 
@@ -72,7 +81,9 @@ namespace TopDown2D.Scripts.Model
 
                 var worldPosition = backgroundTileMap.GetCellCenterWorld(selectedPosition);
 
-                Instantiate(EnemyPrefab, worldPosition, Quaternion.identity, _transform);
+                var enemy = Instantiate(EnemyPrefab, worldPosition, Quaternion.identity, _transform);
+                enemy.OnDestroyAsObservable().Subscribe(_ => enemies.Remove(enemy));
+                enemies.Add(enemy);
 
                 possiblePositions.RemoveAt(randomIndex);
             }
