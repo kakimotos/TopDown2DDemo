@@ -23,11 +23,7 @@ namespace TopDown2D.Scripts.Model
         {
             _transform = transform;
         }
-
-        private void Start()
-        {
-            enemies.ObserveCountChanged().Subscribe(count => Debug.Log(count));
-        }
+        
 
 
         public void GenerateDestroyableWalls(Vector3 playerPosition)
@@ -82,7 +78,7 @@ namespace TopDown2D.Scripts.Model
                 var worldPosition = backgroundTileMap.GetCellCenterWorld(selectedPosition);
 
                 var enemy = Instantiate(EnemyPrefab, worldPosition, Quaternion.identity, _transform);
-                enemy.OnDestroyAsObservable().Subscribe(_ => enemies.Remove(enemy));
+                enemy.OnDestroyAsObservable().Subscribe(_ => enemies.Remove(enemy)).AddTo(gameObject);
                 enemies.Add(enemy);
 
                 possiblePositions.RemoveAt(randomIndex);

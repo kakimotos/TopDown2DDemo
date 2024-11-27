@@ -3813,7 +3813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22ea1d34061d44a59dc4e2db049442d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapManager: {fileID: 0}
+  mapManager: {fileID: 1355188558}
 --- !u!114 &1600870154
 MonoBehaviour:
   m_ObjectHideFlags: 0
