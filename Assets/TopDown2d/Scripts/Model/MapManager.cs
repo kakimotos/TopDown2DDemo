@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+using ObservableCollections;
+using R3;
+using R3.Triggers;
 
 namespace TopDown2D.Scripts.Model
 {
     public class MapManager : MonoBehaviour
     {
         [SerializeField] private GameObject WallPrefab;
+        [SerializeField] private EnemyObject EnemyPrefab;
         
         private Transform _transform;
         public Tilemap backgroundTileMap;
         public Tilemap wallTilemap;
+        public ObservableList<EnemyObject> enemies = new();
 
         private void Awake()
         {
             _transform = transform;
         }
+        
 
 
         public void GenerateDestroyableWalls(Vector3 playerPosition)
@@ -57,7 +63,29 @@ namespace TopDown2D.Scripts.Model
 
                 possiblePositions.RemoveAt(randomIndex);
             }
+            
+            CreateEnemies(possiblePositions);
         }
+
+        private void CreateEnemies(List<Vector3Int> possiblePositions)
+        {
+            var enemyCount = possiblePositions.Count / 3;
+            for (int i = 0; i < enemyCount; i++)
+            {
+                var randomIndex = Random.Range(0, possiblePositions.Count);
+                var selectedPosition = possiblePositions[randomIndex];
+
+                var worldPosition = backgroundTileMap.GetCellCenterWorld(selectedPosition);
+
+                var enemy = Instantiate(EnemyPrefab, worldPosition, Quaternion.identity, _transform);
+                enemy.OnDestroyAsObservable().Subscribe(_ => enemies.Remove(enemy)).AddTo(gameObject);
+                enemies.Add(enemy);
+
+                possiblePositions.RemoveAt(randomIndex);
+            }
+        }
+        
+        
 
     }
 
